@@ -18,12 +18,31 @@ async function fetchJson(url) {
 }
 
 async function getChefBirthday(id) {
-    const ricetta = await fetchJson(`https://dummyjson.com/recipes/${id}`)
-    const chef = await fetchJson(`https://dummyjson.com/users/${ricetta.userId}`)
-    return { ...ricetta, chef }
+    let ricetta;
+    try {
+        ricetta = await fetchJson(`https://dummyjson.com/recipes/${id}`)
+    } catch (error) {
+        throw new Error(`Nessuna ricetta di id ${id} trovata`)
+    }
+
+    let chef;
+    try {
+        chef = await fetchJson(`https://dummyjson.com/users/${ricetta.userId}`)
+    } catch (error) {
+        throw new Error("Chef non trovato")
+    }
+
+    let compleanno = chef.birthDate
+
+    return compleanno
 }
 
 (async () => {
-    const ricetta = await getChefBirthday(1)
-    console.log(`La data di nascita dello chef è ${ricetta.chef.birthDate}`);
+    try {
+        const compleanno = await getChefBirthday(1)
+        console.log(`La data di nascita dello chef è ${compleanno}`)
+    } catch (error) {
+        console.error(error)
+    }
+
 })()
