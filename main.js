@@ -32,7 +32,8 @@ async function getChefBirthday(id) {
         throw new Error("Chef non trovato")
     }
 
-    let compleanno = chef.birthDate
+    let data = dayjs(chef.birthDate)
+    let compleanno = data.format("DD/MM/YYYY")
 
     return compleanno
 }
@@ -44,5 +45,4 @@ async function getChefBirthday(id) {
     } catch (error) {
         console.error(error)
     }
-
 })()
